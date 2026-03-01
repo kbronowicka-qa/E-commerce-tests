@@ -1,5 +1,4 @@
 import { globalPages } from '../fixtures/global/pages'
-import { homepagePages } from '../fixtures/homepage/pages'
 import { loginSignUpConsts, loginSignUpMessages } from '../fixtures/loginSignUp/consts'
 import { loginSignUpPages } from '../fixtures/loginSignUp/pages'
 
@@ -16,7 +15,8 @@ describe('User registration', () => {
     cy.get(loginSignUpPages.signUpEmailInput).type(loginSignUpConsts.email)
     cy.get(loginSignUpPages.signUpButton).click()
     cy.url().should('eq', `${Cypress.config().baseUrl}signup`)
-    cy.contains(loginSignUpMessages.enterAccountInformation).should('be.visible') // Validate signup page loaded
+    // Validate signup page loaded
+    cy.contains(loginSignUpMessages.enterAccountInformation).should('be.visible') 
     cy.get(loginSignUpPages.loginForm).should('be.visible')
     cy.get(loginSignUpPages.titleRadioButton).eq(1).click()
     cy.get(loginSignUpPages.passwordInput).type(loginSignUpConsts.password)
@@ -37,7 +37,8 @@ describe('User registration', () => {
     cy.get(loginSignUpPages.phoneNumberInput).type(loginSignUpConsts.phoneNumber)
     cy.get(loginSignUpPages.createAccountButton).click()
     cy.get(loginSignUpPages.accountCreatedMessage).should('contain.text', loginSignUpMessages.accountCreated)
-    cy.verifyUserExists(loginSignUpConsts.email, loginSignUpConsts.password) // Validate user was created via API
+    // Validate user was created via API
+    cy.verifyUserExists(loginSignUpConsts.email, loginSignUpConsts.password) 
     cy.get(loginSignUpPages.continueButton).click()
     cy.url().should('eq', `${Cypress.config().baseUrl}`)
     cy.contains(`Logged in as ${loginSignUpConsts.username}`).should('be.visible')
@@ -182,11 +183,10 @@ describe('User login', () => {
     cy.get(loginSignUpPages.loginEmailInput).then($input => {
       expect($input[0].validationMessage).to.match(new RegExp(loginSignUpMessages.emailValidationPattern, 'i'))
     })
-    // Valid email format allows submission
+    // Valid email format
     cy.get(loginSignUpPages.loginEmailInput).clear().type(loginSignUpConsts.email)
     cy.get(loginSignUpPages.loginPasswordInput).clear().type(loginSignUpConsts.password)
     cy.get(loginSignUpPages.loginButton).click()
-    // Should not show validation error, should proceed or show login error (if credentials don't exist)
     cy.url().should('not.eq', `${Cypress.config().baseUrl}login`)
   })
 
@@ -203,5 +203,29 @@ describe('User login', () => {
     cy.get(loginSignUpPages.loginButton).click()
     cy.url().should('eq', `${Cypress.config().baseUrl}`)
     cy.contains(`Logged in as ${loginSignUpConsts.username}`).should('be.visible')
+  })
+
+  it('Logout successfully', () => {
+    cy.navigateToLoginForm()
+    cy.get(loginSignUpPages.loginEmailInput).type(loginSignUpConsts.email)
+    cy.get(loginSignUpPages.loginPasswordInput).type(loginSignUpConsts.password)
+    cy.get(loginSignUpPages.loginButton).click()
+    cy.url().should('eq', `${Cypress.config().baseUrl}`)
+    cy.contains(`Logged in as ${loginSignUpConsts.username}`).should('be.visible')
+    cy.get(globalPages.logout).click()
+    cy.url().should('eq', `${Cypress.config().baseUrl}login`)
+    cy.contains(`Logged in as ${loginSignUpConsts.username}`).should('not.exist')
+  })
+
+  it('Delete account successfully', () => {
+    cy.navigateToLoginForm()
+    cy.get(loginSignUpPages.loginEmailInput).type(loginSignUpConsts.email)
+    cy.get(loginSignUpPages.loginPasswordInput).type(loginSignUpConsts.password)
+    cy.get(loginSignUpPages.loginButton).click()
+    cy.url().should('eq', `${Cypress.config().baseUrl}`)
+    cy.contains(`Logged in as ${loginSignUpConsts.username}`).should('be.visible')
+    cy.get(globalPages.deleteAccount).click()
+    cy.url().should('include', '/delete_account')
+    cy.contains(loginSignUpMessages.accountDeleted).should('be.visible')
   })
 })
