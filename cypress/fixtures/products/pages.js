@@ -14,7 +14,6 @@ export const productsPages = {
   productAvailability: 'p:contains("Availability")',
   productCondition: 'p:contains("Condition")',
   productBrand: 'p:contains("Brand")',
-  quantityInput: '#quantity',
   
   // Categories sidebar
   categoriesSidebar: '.left-sidebar',
@@ -35,8 +34,16 @@ export const productsPages = {
   cartButton: 'a[href="/view_cart"]',
   cartTable: '.table-responsive',
   cartProduct: '.cart_product',
-  deleteFromCartButton: 'a.cart_quantity_delete',
   proceedCheckoutButton: 'a.btn-default:contains("Proceed To Checkout")',
+  
+  // Checkout page
+  checkoutAddressForm: '.form-group textarea',
+  checkoutCommentTextarea: 'textarea[name="message"]',
+  placeOrderButton: 'a.btn-default:contains("Place Order")',
+  paymentOption: 'input[name="payment_option"]',
+  payButton: 'button:contains("Pay")',
+  orderConfirmationMessage: '.order-confirmed',
+  orderSuccessMessage: 'h2:contains("Order Placed Successfully")',
   
   // Product review
   writeReviewButton: 'a[href*="#reviews"]',
@@ -44,9 +51,5 @@ export const productsPages = {
   reviewEmailInput: '#email',
   reviewTextarea: '#review',
   submitReviewButton: '#button-review',
-  reviewSuccessMessage: '.alert-success',
-  
-  // Add to cart modal
-  continueShoppingButton: 'button[data-dismiss="modal"]',
-  cartModal: '#cartModal'
+  reviewSuccessMessage: '.alert-success'
 }
