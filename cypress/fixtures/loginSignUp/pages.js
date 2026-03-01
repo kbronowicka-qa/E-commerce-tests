@@ -1,4 +1,7 @@
 export const loginSignUpPages = {
+  loginEmailInput: '[data-qa="login-email"]',
+  loginPasswordInput: '[data-qa="login-password"]',
+  loginButton: '[data-qa="login-button"]',
   signUpNameInput: '[data-qa="signup-name"]',
   signUpEmailInput: '[data-qa="signup-email"]',
   signUpButton: '[data-qa="signup-button"]',
@@ -22,6 +25,5 @@ export const loginSignUpPages = {
   phoneNumberInput: '[data-qa="mobile_number"]',
   createAccountButton: '[data-qa="create-account"]',
   accountCreatedMessage: '[data-qa="account-created"]',
-  continueButton: '[data-qa="continue-button"]',
-  deleteAccount: 'a[href="/delete_account"]',
+  continueButton: '[data-qa="continue-button"]'
 }
