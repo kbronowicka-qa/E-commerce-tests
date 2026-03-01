@@ -1,7 +1,10 @@
 import { loginSignUpConsts } from '../fixtures/loginSignUp/consts'
 import { globalPages } from '../fixtures/global/pages'
+import { globalConsts } from '../fixtures/global/consts'
 import { loginSignUpPages } from '../fixtures/loginSignUp/pages'
 import { loginSignUpMessages } from '../fixtures/loginSignUp/consts'
+import { productsPages } from '../fixtures/products/pages'
+import { productsConsts } from '../fixtures/products/consts'
 
 /**
  * Creates a new user account via API
@@ -129,4 +132,42 @@ Cypress.Commands.add('navigateToLoginForm', () => {
   cy.url().should('eq', `${Cypress.config().baseUrl}login`)
   cy.contains(loginSignUpMessages.loginToYourAccount).should('be.visible')
   cy.get(loginSignUpPages.loginForm).should('be.visible')
+})
+
+/**
+ * Visits the homepage and verifies it loaded correctly
+ * @returns {void} Completes navigation and validation
+ */
+// Navigation helper to homepage
+Cypress.Commands.add('visitHomepage', () => {
+  cy.visit('/')
+  cy.url().should('eq', `${Cypress.config().baseUrl}`)
+  cy.contains(globalConsts.welcomeMessage).should('be.visible')
+})
+
+/**
+ * Logs in a user with email and password
+ * @param {string} [email] - Email to login with (defaults to loginSignUpConsts.email)
+ * @param {string} [password] - Password to login with (defaults to loginSignUpConsts.password)
+ * @returns {void} Completes login and verification
+ */
+// Login helper
+Cypress.Commands.add('login', (email, password) => {
+  cy.navigateToLoginForm()
+  cy.get(loginSignUpPages.loginEmailInput).type(email || loginSignUpConsts.email)
+  cy.get(loginSignUpPages.loginPasswordInput).type(password || loginSignUpConsts.password)
+  cy.get(loginSignUpPages.loginButton).click()
+  cy.url().should('eq', `${Cypress.config().baseUrl}`)
+})
+
+/**
+ * Adds a product to cart by index
+ * @param {number} [index=0] - Index of the product to add (defaults to first product)
+ * @returns {void} Completes add to cart action
+ */
+// Add product to cart helper
+Cypress.Commands.add('addProductToCart', (index = 0) => {
+  cy.get(productsPages.productItem).eq(index).within(() => {
+    cy.contains(productsConsts.addToCart).click()
+  })
 })
